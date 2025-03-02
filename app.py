@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
 import base64
-
+ 
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
