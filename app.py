@@ -7,7 +7,7 @@ import base64
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgeats_user:WgFdsAcOjUPKYK611PiwkKkjhCPmPqfH@dpg-cv241h0gph6c73bcfcb0-a.singapore-postgres.render.com/pgeats'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgeats_bs1z_user:VUl0bRjSsR7t9OwV8wruNYHVgzaT4ApI@dpg-cv27otpu0jms738r4fd0-a.singapore-postgres.render.com/pgeats_bs1z'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
