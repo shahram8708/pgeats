@@ -150,13 +150,18 @@
 
                     <div class="room-images">
                         {% for image in room.images %}
-                        <img src="{{ url_for('static', filename=image.image_path) }}" alt="Room Image">
+                        <img src="data:image/jpeg;base64,{{ image.image_data|b64encode }}" alt="Room Image">
                         {% endfor %}
                     </div>
+
                 </div>
             </div>
             {% endfor %}
         </div>
+        <form method="POST" action="{{ url_for('delete_pg', pg_id=pg.id) }}"
+            onsubmit="return confirm('Are you sure you want to delete this PG?');">
+            <button type="submit" class="btn btn-danger">Delete PG</button>
+        </form>
 
         <a href="{{ url_for('pg_list') }}" class="btn btn-back mt-3">⬅️ Back to Listings</a>
     </div>

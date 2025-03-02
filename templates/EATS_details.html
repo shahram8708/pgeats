@@ -153,13 +153,18 @@
 
                     <div class="food-images">
                         {% for image in food.images %}
-                        <img src="{{ url_for('static', filename=image.image_path) }}" alt="Food Image">
+                        <img src="data:image/jpeg;base64,{{ image.image_data|b64encode }}" alt="Food Image">
                         {% endfor %}
                     </div>
+
                 </div>
             </div>
             {% endfor %}
         </div>
+        <form method="POST" action="{{ url_for('delete_EATS', EATS_id=EATS.id) }}"
+            onsubmit="return confirm('Are you sure you want to delete this EATS?');">
+            <button type="submit" class="btn btn-danger">Delete EATS</button>
+        </form>
 
         <a href="{{ url_for('EATS_list') }}" class="btn btn-back mt-3">⬅️ Back to Listings</a>
     </div>

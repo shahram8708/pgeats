@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, flash, url
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
+import base64
 
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
@@ -44,6 +45,7 @@ class RoomImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
     image_path = db.Column(db.String(300))
+    image_data = db.Column(db.LargeBinary)
 
 class EATSDetails(db.Model):
     __tablename__ = 'EATS_details'
@@ -81,7 +83,7 @@ class Food(db.Model):
 class FoodImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     food_id = db.Column(db.Integer, db.ForeignKey('food.id'), nullable=False)
-    image_path = db.Column(db.String(300), nullable=False)
+    image_data = db.Column(db.LargeBinary)
 
 with app.app_context():
     db.create_all()
@@ -155,19 +157,25 @@ def pg_form():
                 image_files = request.files.getlist(f"images_{i}")
                 for file in image_files:
                     if file and file.filename != "":
-                        filename = secure_filename(file.filename)
-                        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                        file.save(file_path)
-
-                        relative_path = f"uploads/{filename}".replace("\\", "/")
-
-                        new_image = RoomImage(room_id=new_room.id, image_path=relative_path)
+                        image_data = file.read() 
+                        new_image = RoomImage(room_id=new_room.id, image_data=image_data)
                         db.session.add(new_image)
                         db.session.commit()
 
         return "PG Details Submitted Successfully!"
 
     return render_template("form.html")
+
+@app.route("/get_image/<int:image_id>")
+def get_image(image_id):
+    image = RoomImage.query.get(image_id)
+    if image:
+        return f'<img src="data:image/jpeg;base64,{base64.b64encode(image.image_data).decode()}" />'
+    return "Image Not Found", 404
+
+@app.template_filter("b64encode")
+def b64encode_filter(data):
+    return base64.b64encode(data).decode("utf-8")
 
 @app.route("/food", methods=["GET", "POST"])
 def EATS_form():
@@ -210,42 +218,42 @@ def EATS_form():
         food_count = int(request.form.get("food_count", 1))
 
         for i in range(food_count):
-            food_key = f"food_option_{i}"
-            if food_key in request.form:
-                food_option = request.form.get(f"food_option_{i}", "").strip() or "Unknown"
-                price = request.form.get(f"price_{i}", "0").strip() or "0"
-                food_items = request.form.get(f"food_items_{i}", "").strip() or "Not Specified"
+            food_option = request.form.get(f"food_option_{i}", "").strip() or "Unknown"
+            price = request.form.get(f"price_{i}", "0").strip() or "0"
+            food_items = request.form.get(f"food_items_{i}", "").strip() or "Not Specified"
 
-                try:
-                    price = float(price)
-                except ValueError:
-                    price = 0.0
+            try:
+                price = float(price)
+            except ValueError:
+                price = 0.0
 
-                new_food = Food(
-                    EATS_id=new_EATS.id,
-                    food_type=food_option, 
-                    food_name=food_items,  
-                    price=price
-                )
-                db.session.add(new_food)
-                db.session.commit()
+            new_food = Food(
+                EATS_id=new_EATS.id,
+                food_type=food_option, 
+                food_name=food_items,  
+                price=price
+            )
+            db.session.add(new_food)
+            db.session.commit()
 
-                image_files = request.files.getlist(f"images_{i}")
-                for file in image_files:
-                    if file and file.filename != "":
-                        filename = secure_filename(file.filename)
-                        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                        file.save(file_path)
-
-                        relative_path = f"uploads/{filename}".replace("\\", "/")
-
-                        new_image = FoodImage(food_id=new_food.id, image_path=relative_path)
-                        db.session.add(new_image)
-                        db.session.commit()
+            image_files = request.files.getlist(f"images_{i}")
+            for file in image_files:
+                if file and file.filename != "":
+                    image_data = file.read() 
+                    new_image = FoodImage(food_id=new_food.id, image_data=image_data)
+                    db.session.add(new_image)
+                    db.session.commit()
 
         return "EATS Details Submitted Successfully!"
 
     return render_template("food_form.html")
+
+@app.route("/get_food_image/<int:image_id>")
+def get_food_image(image_id):
+    image = FoodImage.query.get(image_id)
+    if image:
+        return f'<img src="data:image/jpeg;base64,{base64.b64encode(image.image_data).decode()}" />'
+    return "Image Not Found", 404
 
 @app.route('/pg-list')
 def pg_list():
@@ -293,6 +301,44 @@ def EATS_details(EATS_id):
         food.images = FoodImage.query.filter_by(food_id=food.id).all()
 
     return render_template('EATS_details.html', EATS=EATS, foods=foods)
+
+@app.route('/delete-pg/<int:pg_id>', methods=['POST'])
+def delete_pg(pg_id):
+    if not session.get('admin_logged_in'):
+        flash("Unauthorized Access! Please Login.", "danger")
+        return redirect(url_for('admin_login'))
+
+    pg = PGDetails.query.get_or_404(pg_id)
+
+    rooms = Room.query.filter_by(pg_id=pg_id).all()
+    for room in rooms:
+        RoomImage.query.filter_by(room_id=room.id).delete()
+        db.session.delete(room)
+
+    db.session.delete(pg)
+    db.session.commit()
+    
+    flash("PG deleted successfully!", "success")
+    return redirect(url_for('pg_list'))  
+
+@app.route('/delete-EATS/<int:EATS_id>', methods=['POST'])
+def delete_EATS(EATS_id):
+    if not session.get('admin_logged_in'):
+        flash("Unauthorized Access! Please Login.", "danger")
+        return redirect(url_for('admin_login'))
+
+    EATS = EATSDetails.query.get_or_404(EATS_id)
+
+    foods = Food.query.filter_by(EATS_id=EATS_id).all()
+    for food in foods:
+        FoodImage.query.filter_by(food_id=food.id).delete()
+        db.session.delete(food)
+
+    db.session.delete(EATS)
+    db.session.commit()
+    
+    flash("EATS deleted successfully!", "success")
+    return redirect(url_for('EATS_list'))
 
 @app.route('/')
 def home():
