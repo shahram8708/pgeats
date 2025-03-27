@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload EATS Details</title>
+    <title>Upload Restaurant Details</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -105,26 +105,26 @@
         </div>
 
         <label class="form-label mt-2">Food Option:</label>
-        <select name="food_option_${foodCount}" class="form-select" required>
+        <select name="meal_option_${foodCount}" class="form-select" required>
             <option value="" disabled selected>Select Food Option</option>
-            <option value="North Indian Thali">North Indian Thali</option>
-            <option value="South Indian Thali">South Indian Thali</option>
-            <option value="Gujarati Thali">Gujarati Thali</option>
-            <option value="Rajasthani Thali">Rajasthani Thali</option>
-            <option value="Bengali Thali">Bengali Thali</option>
-            <option value="Maharashtrian Thali">Maharashtrian Thali</option>
-            <option value="Punjabi Thali">Punjabi Thali</option>
+            <option value="North Indian Menu">North Indian Menu</option>
+            <option value="South Indian Menu">South Indian Menu</option>
+            <option value="Gujarati Menu">Gujarati Menu</option>
+            <option value="Rajasthani Menu">Rajasthani Menu</option>
+            <option value="Bengali Menu">Bengali Menu</option>
+            <option value="Maharashtrian Menu">Maharashtrian Menu</option>
+            <option value="Punjabi Menu">Punjabi Menu</option>
             <option value="Kerala Sadhya">Kerala Sadhya</option>
-            <option value="Andhra Thali">Andhra Thali</option>
-            <option value="Bihari Thali">Bihari Thali</option>
-            <option value="Kashmiri Thali">Kashmiri Thali</option>
+            <option value="Andhra Menu">Andhra Menu</option>
+            <option value="Bihari Menu">Bihari Menu</option>
+            <option value="Kashmiri Menu">Kashmiri Menu</option>
         </select>
 
         <label class="form-label mt-2">Price:</label>
         <input type="text" name="price_${foodCount}" class="form-control" required>
 
         <label class="form-label mt-2">Food Items:</label>
-        <input type="text" name="food_items_${foodCount}" class="form-control" required>
+        <input type="text" name="meal_items_${foodCount}" class="form-control" required>
 
         <label class="form-label mt-2">Upload Images (Max 5):</label>
         <input type="file" name="images_${foodCount}" class="form-control" multiple accept="image/*" required>
@@ -153,8 +153,8 @@
 
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">🏠 Upload EATS Details</h2>
-        <form action="/food" method="POST" enctype="multipart/form-data">
+        <h2 class="text-center mb-4">🏠 Upload Restaurant Details</h2>
+        <form action="/meal" method="POST" enctype="multipart/form-data">
 
             <h4 class="mb-3">👤 Owner Details</h4>
             <div class="mb-3">
@@ -172,10 +172,10 @@
                 <input type="email" name="email" class="form-control" required>
             </div>
 
-            <h4 class="mt-4">🏡 EATS Details</h4>
+            <h4 class="mt-4">🏡 Restaurant Details</h4>
             <div class="mb-3">
-                <label class="form-label">EATS Name:</label>
-                <input type="text" name="EATS_name" class="form-control" required>
+                <label class="form-label">Restaurant Name:</label>
+                <input type="text" name="Restaurant_name" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -199,38 +199,11 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">🕒 Order Time (Morning):</label>
+                <label class="form-label">🕒 Order Starting or Ending Time:</label>
                 <div class="d-flex">
                     <input type="time" name="order_time_morning_start" class="form-control me-2" required>
                     <span class="align-self-center">to</span>
                     <input type="time" name="order_time_morning_end" class="form-control ms-2" required>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">🕒 Order Time (Night):</label>
-                <div class="d-flex">
-                    <input type="time" name="order_time_night_start" class="form-control me-2" required>
-                    <span class="align-self-center">to</span>
-                    <input type="time" name="order_time_night_end" class="form-control ms-2" required>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">🚚 Delivery Time (Morning):</label>
-                <div class="d-flex">
-                    <input type="time" name="delivery_time_morning_start" class="form-control me-2" required>
-                    <span class="align-self-center">to</span>
-                    <input type="time" name="delivery_time_morning_end" class="form-control ms-2" required>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">🚚 Delivery Time (Night):</label>
-                <div class="d-flex">
-                    <input type="time" name="delivery_time_night_start" class="form-control me-2" required>
-                    <span class="align-self-center">to</span>
-                    <input type="time" name="delivery_time_night_end" class="form-control ms-2" required>
                 </div>
             </div>
 
@@ -241,26 +214,26 @@
                     </div>
 
                     <label class="form-label mt-2">Food Option:</label>
-                    <select name="food_option_0" class="form-select" required>
+                    <select name="meal_option_0" class="form-select" required>
                         <option value="" disabled selected>Select Food Option</option>
-                        <option value="North Indian Thali">North Indian Thali</option>
-                        <option value="South Indian Thali">South Indian Thali</option>
-                        <option value="Gujarati Thali">Gujarati Thali</option>
-                        <option value="Rajasthani Thali">Rajasthani Thali</option>
-                        <option value="Bengali Thali">Bengali Thali</option>
-                        <option value="Maharashtrian Thali">Maharashtrian Thali</option>
-                        <option value="Punjabi Thali">Punjabi Thali</option>
+                        <option value="North Indian Menu">North Indian Menu</option>
+                        <option value="South Indian Menu">South Indian Menu</option>
+                        <option value="Gujarati Menu">Gujarati Menu</option>
+                        <option value="Rajasthani Menu">Rajasthani Menu</option>
+                        <option value="Bengali Menu">Bengali Menu</option>
+                        <option value="Maharashtrian Menu">Maharashtrian Menu</option>
+                        <option value="Punjabi Menu">Punjabi Menu</option>
                         <option value="Kerala Sadhya">Kerala Sadhya</option>
-                        <option value="Andhra Thali">Andhra Thali</option>
-                        <option value="Bihari Thali">Bihari Thali</option>
-                        <option value="Kashmiri Thali">Kashmiri Thali</option>
+                        <option value="Andhra Menu">Andhra Menu</option>
+                        <option value="Bihari Menu">Bihari Menu</option>
+                        <option value="Kashmiri Menu">Kashmiri Menu</option>
                     </select>
 
                     <label class="form-label mt-2">Price:</label>
                     <input type="text" name="price_0" class="form-control" required>
 
                     <label class="form-label mt-2">Food Items:</label>
-                    <input type="text" name="food_items_0" class="form-control" required>
+                    <input type="text" name="meal_items_0" class="form-control" required>
 
                     <label class="form-label mt-2">Upload Images (Max 5):</label>
                     <input type="file" name="images_0" class="form-control" multiple accept="image/*" required>

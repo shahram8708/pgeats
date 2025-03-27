@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PG & EATS Services</title>
+    <title>Yumma Services</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
@@ -33,7 +33,6 @@
             color: #fff;
             text-decoration: none;
             font-size: 18px;
-            margin: 0 15px;
             transition: 0.3s;
         }
 
@@ -136,6 +135,15 @@
             padding: 20px;
             margin-top: 50px;
         }
+
+        .navbar-nav .nav-item .dropdown-menu {
+            display: none;
+        }
+
+        .navbar-nav .nav-item:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
     </style>
 </head>
 
@@ -143,24 +151,34 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">PG & EATS</a>
+            <a class="navbar-brand" href="#">Yumma</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('pg_list') }}">PG Listings</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button">Listings</a>
+                        <ul class="dropdown-menu bg-dark">
+                            <li><a class="dropdown-item" href="{{ url_for('pg_list') }}">PG Room Listings</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('EATS_list') }}">Tiffin Services Listings</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('hotel_list') }}">Hotel Room Listings</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('Restaurant_list') }}">Restaurant Food
+                                    Listings</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('EATS_list') }}">EATS Listings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('pg_form') }}">Register PG</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('EATS_form') }}">Register EATS</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button">Register</a>
+                        <ul class="dropdown-menu bg-dark">
+                            <li><a class="dropdown-item" href="{{ url_for('pg_form') }}">Register PG Room</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('EATS_form') }}">Register Tiffin Services</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('hotel_form') }}">Register Hotel Room</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('Restaurant_form') }}">Register Restaurant
+                                    Food</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin_login') }}">Admin Login</a>
@@ -170,17 +188,19 @@
         </div>
     </nav>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <section class="hero-section d-flex align-items-center text-center position-relative">
+    <section class="hero-section d-flex align-items-center text-center position-relative bg-dark py-5">
         <div class="container position-relative">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <h1 class="display-4 fw-bold text-white">Find the Best PG & Food Services</h1>
-                    <p class="lead text-white-50">Your one-stop solution for hassle-free accommodation and meal
-                        services.</p>
-                    <a href="https://pgeats.netlify.app/" class="btn btn-primary btn-lg mt-3">Explore Now</a>
+                    <h1 class="display-4 fw-bold text-white">Welcome to Yumma</h1>
+                    <p class="lead text-white-50">
+                        Your one-stop platform for PGs, Tiffin Services, Hotels, and Restaurants.
+                        Find, book, or register your accommodation & food services effortlessly!
+                    </p>
+                    <a href="https://theyumma.netlify.app/" class="btn btn-primary btn-lg mt-3">Explore Now</a>
                 </div>
             </div>
         </div>
@@ -227,34 +247,86 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <section class="container">
-        <h2>Our Services</h2>
-        <div class="services">
-            <div class="card">
-                <i class="fa-solid fa-hotel"></i>
-                <h3>PG Accommodation</h3>
-                <p>Find verified PGs with comfortable rooms and facilities.</p>
-                <a href="{{ url_for('pg_list') }}" class="btn">View Listings</a>
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Our Services</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-hotel text-primary mb-3 fs-1"></i>
+                    <h3>PG Accommodation</h3>
+                    <p>Find verified PGs with comfortable rooms and facilities.</p>
+                    <a href="{{ url_for('pg_list') }}" class="btn btn-primary">View PG Listings</a>
+                </div>
             </div>
 
-            <div class="card">
-                <i class="fa-solid fa-utensils"></i>
-                <h3>Food Services</h3>
-                <p>Delicious and hygienic meal services at your doorstep.</p>
-                <a href="{{ url_for('EATS_list') }}" class="btn">View Listings</a>
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-utensils text-danger mb-3 fs-1"></i>
+                    <h3>Food Services</h3>
+                    <p>Delicious and hygienic meal services at your doorstep.</p>
+                    <a href="{{ url_for('EATS_list') }}" class="btn btn-danger">View Tiffin Listings</a>
+                </div>
             </div>
 
-            <div class="card">
-                <i class="fa-solid fa-clipboard-list"></i>
-                <h3>Easy Registration</h3>
-                <p>Register your PG or Food Service with us in minutes.</p>
-                <a href="{{ url_for('pg_form') }}" class="btn">Register Now</a>
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-bed text-success mb-3 fs-1"></i>
+                    <h3>Hotel Room Booking</h3>
+                    <p>Book affordable and comfortable hotel rooms easily.</p>
+                    <a href="{{ url_for('hotel_list') }}" class="btn btn-success">View Hotel Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-utensils text-warning mb-3 fs-1"></i>
+                    <h3>Restaurant Food Listings</h3>
+                    <p>Find the best restaurants and their top dishes.</p>
+                    <a href="{{ url_for('Restaurant_list') }}" class="btn btn-warning text-dark">View Restaurant
+                        Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-clipboard-list text-info mb-3 fs-1"></i>
+                    <h3>Register Your PG</h3>
+                    <p>List your PG accommodation and reach more tenants.</p>
+                    <a href="{{ url_for('pg_form') }}" class="btn btn-info text-white">Register PG</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-concierge-bell text-secondary mb-3 fs-1"></i>
+                    <h3>Register Your Tiffin Service</h3>
+                    <p>Expand your food business by listing with us.</p>
+                    <a href="{{ url_for('EATS_form') }}" class="btn btn-secondary">Register Tiffin</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-hotel text-dark mb-3 fs-1"></i>
+                    <h3>Register Your Hotel</h3>
+                    <p>List your hotel and attract more guests easily.</p>
+                    <a href="{{ url_for('hotel_form') }}" class="btn btn-dark">Register Hotel</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-utensils text-primary mb-3 fs-1"></i>
+                    <h3>Register Your Restaurant</h3>
+                    <p>Showcase your restaurant and attract more customers.</p>
+                    <a href="{{ url_for('Restaurant_form') }}" class="btn btn-primary">Register Restaurant</a>
+                </div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
-        <p>&copy; 2025 PG & EATS. All Rights Reserved.</p>
+        <p>&copy; 2025 Yumma. All Rights Reserved.</p>
     </footer>
 
 </body>

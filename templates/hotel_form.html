@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload PG Details</title>
+    <title>Upload Hotel Room Details</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -129,8 +129,8 @@
         <label class="form-label mt-2">Price:</label>
         <input type="text" name="price_${roomCount}" class="form-control" required>
 
-        <label class="form-label mt-2">Room Sharing:</label>
-        <input type="number" name="room_sharing_${roomCount}" class="form-control" required>
+        <label class="form-label mt-2">Available Room:</label>
+        <input type="number" name="available_room_${roomCount}" class="form-control" required>
 
         <label class="form-label mt-2">Upload Images (Max 5):</label>
         <input type="file" name="images_${roomCount}" class="form-control" multiple accept="image/*" required>
@@ -159,8 +159,8 @@
 
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">🏠 Upload PG Details</h2>
-        <form action="/pg" method="POST" enctype="multipart/form-data">
+        <h2 class="text-center mb-4">🏠 Upload Hotel Room Details</h2>
+        <form action="/hotel" method="POST" enctype="multipart/form-data">
 
             <h4 class="mb-3">👤 Owner Details</h4>
             <div class="mb-3">
@@ -178,10 +178,10 @@
                 <input type="email" name="email" class="form-control" required>
             </div>
 
-            <h4 class="mt-4">🏡 PG Details</h4>
+            <h4 class="mt-4">🏡 Hotel Room Details</h4>
             <div class="mb-3">
-                <label class="form-label">PG Name:</label>
-                <input type="text" name="pg_name" class="form-control" required>
+                <label class="form-label">Hotel Room Name:</label>
+                <input type="text" name="hotel_name" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -245,8 +245,8 @@
                     <label class="form-label mt-2">Price:</label>
                     <input type="text" name="price_0" class="form-control" required>
 
-                    <label class="form-label mt-2">Room Sharing:</label>
-                    <input type="number" name="room_sharing_0" class="form-control" required>
+                    <label class="form-label mt-2">Available Room:</label>
+                    <input type="number" name="available_room_0" class="form-control" required>
 
                     <label class="form-label mt-2">Upload Images (Max 5):</label>
                     <input type="file" name="images_0" class="form-control" multiple accept="image/*" required>
