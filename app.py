@@ -8,7 +8,7 @@ from utils import send_email
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgeats_sb9b_user:8eYRKUxK27GAOLQqNTzVLCxglCKBly7Q@dpg-cvt68oqdbo4c73cirjj0-a.singapore-postgres.render.com/pgeats_sb9b'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
