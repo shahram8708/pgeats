@@ -8,7 +8,7 @@ from utils import send_email
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgeats_sb9b_user:8eYRKUxK27GAOLQqNTzVLCxglCKBly7Q@dpg-cvt68oqdbo4c73cirjj0-a.singapore-postgres.render.com/pgeats_sb9b'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yumma_user:0sbe7KzsKPc7XIOWDorlcvoDTg4iYIm2@dpg-d02dv8qdbo4c73eohoig-a.singapore-postgres.render.com/yumma'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
@@ -116,6 +116,7 @@ def pg_form():
         name = request.form["name"]
         whatsapp = request.form["whatsapp"]
         email = request.form["email"]
+        session["email"] = email.strip().lower()
         pg_name = request.form["pg_name"]
         city = request.form["city"]
         area = request.form["area"]
@@ -165,7 +166,7 @@ def pg_form():
             body=f"A new PG has been added.\n\nPG Name: {pg_name}\nView Details: https://yumma.onrender.com/pg-details/{new_pg.id}"
         )
 
-        return "PG Details Submitted Successfully!"
+        return redirect(url_for('pg_details', pg_id=new_pg.id))
 
     return render_template("form.html")
 
@@ -284,13 +285,16 @@ def EATS_list():
 
 @app.route('/pg-details/<int:pg_id>')
 def pg_details(pg_id):
-    if not session.get('admin_logged_in'):
-        flash("Unauthorized Access! Please Login.", "danger")
-        return redirect(url_for('admin_login'))
-    
     pg = PGDetails.query.get_or_404(pg_id)
-    rooms = Room.query.filter_by(pg_id=pg_id).all()
 
+    user_email = (session.get('email') or '').strip().lower()
+    pg_email = (pg.email or '').strip().lower()
+
+    if not session.get('admin_logged_in') and user_email != pg_email:
+        flash("Unauthorized Access! You can only view your own PG details.", "danger")
+        return redirect(url_for('admin_login')) 
+
+    rooms = Room.query.filter_by(pg_id=pg_id).all()
     for room in rooms:
         room.images = RoomImage.query.filter_by(room_id=room.id).all()
 
