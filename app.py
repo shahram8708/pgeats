@@ -187,6 +187,7 @@ def EATS_form():
         name = request.form["name"]
         whatsapp = request.form["whatsapp"]
         email = request.form["email"]
+        session["email"] = email.strip().lower()
         EATS_name = request.form["EATS_name"]
         city = request.form["city"]
         area = request.form["area"]
@@ -240,11 +241,6 @@ def EATS_form():
             db.session.add(new_food)
             db.session.commit()
 
-            send_email(
-                subject="New Tiffin Services Listing Submitted",
-                body=f"A new Tiffin Services has been added.\n\nFood Name: {EATS_name}\nView Details: https://yumma.onrender.com/EATS-details/{new_EATS.id}"
-            )
-
             image_files = request.files.getlist(f"images_{i}")
             for file in image_files:
                 if file and file.filename != "":
@@ -253,7 +249,12 @@ def EATS_form():
                     db.session.add(new_image)
                     db.session.commit()
 
-        return "EATS Details Submitted Successfully!"
+        send_email(
+            subject="New Tiffin Services Listing Submitted",
+            body=f"A new Tiffin Services has been added.\n\nFood Name: {EATS_name}\nView Details: https://yumma.onrender.com/EATS-details/{new_EATS.id}"
+        )
+
+        return redirect(url_for('EATS_details', EATS_id=new_EATS.id))
 
     return render_template("food_form.html")
 
@@ -302,11 +303,15 @@ def pg_details(pg_id):
 
 @app.route('/EATS-details/<int:EATS_id>')
 def EATS_details(EATS_id):
-    if not session.get('admin_logged_in'):
-        flash("Unauthorized Access! Please Login.", "danger")
-        return redirect(url_for('admin_login'))
-    
     EATS = EATSDetails.query.get_or_404(EATS_id)
+
+    user_email = (session.get('email') or '').strip().lower()
+    eats_email = (EATS.email or '').strip().lower()
+
+    if not session.get('admin_logged_in') and user_email != eats_email:
+        flash("Unauthorized Access! You can only view your own Tiffin Services details.", "danger")
+        return redirect(url_for('admin_login')) 
+    
     foods = Food.query.filter_by(EATS_id=EATS_id).all()
 
     for food in foods:
@@ -388,6 +393,7 @@ def hotel_form():
         name = request.form["name"]
         whatsapp = request.form["whatsapp"]
         email = request.form["email"]
+        session["email"] = email.strip().lower()
         hotel_name = request.form["hotel_name"]
         city = request.form["city"]
         area = request.form["area"]
@@ -424,10 +430,6 @@ def hotel_form():
                 db.session.add(new_room)
                 db.session.commit()
              
-                send_email(
-                    subject="New Hotel Listing Submitted",
-                    body=f"A new Hotel has been added.\n\nHotel Name: {hotel_name}\nView Details: https://yumma.onrender.com/hotel-details/{new_hotel.id}"
-                )
                 
                 image_files = request.files.getlist(f"images_{i}")
                 for file in image_files:
@@ -437,7 +439,12 @@ def hotel_form():
                         db.session.add(new_image)
                         db.session.commit()
 
-        return "Hotel Details Submitted Successfully!"
+        send_email(
+            subject="New Hotel Listing Submitted",
+            body=f"A new Hotel has been added.\n\nHotel Name: {hotel_name}\nView Details: https://yumma.onrender.com/hotel-details/{new_hotel.id}"
+        )
+
+        return redirect(url_for('hotel_details', hotel_id=new_hotel.id))
 
     return render_template("hotel_form.html")
 
@@ -459,11 +466,15 @@ def hotel_list():
 
 @app.route('/hotel-details/<int:hotel_id>')
 def hotel_details(hotel_id):
-    if not session.get('admin_logged_in'):
-        flash("Unauthorized Access! Please Login.", "danger")
-        return redirect(url_for('admin_login'))
-    
     hotel = HotelDetails.query.get_or_404(hotel_id)
+
+    user_email = (session.get('email') or '').strip().lower()
+    hotel_email = (hotel.email or '').strip().lower()
+
+    if not session.get('admin_logged_in') and user_email != hotel_email:
+        flash("Unauthorized Access! You can only view your own Hotel details.", "danger")
+        return redirect(url_for('admin_login')) 
+
     rooms = HotelRoom.query.filter_by(hotel_id=hotel_id).all()
 
     for room in rooms:
@@ -527,6 +538,7 @@ def Restaurant_form():
         name = request.form["name"]
         whatsapp = request.form["whatsapp"]
         email = request.form["email"]
+        session["email"] = email.strip().lower()
         Restaurant_name = request.form["Restaurant_name"]
         city = request.form["city"]
         area = request.form["area"]
@@ -567,11 +579,6 @@ def Restaurant_form():
             db.session.add(new_meal)
             db.session.commit()
 
-            send_email(
-                subject="New Restaurant Listing Submitted",
-                body=f"A new Restaurant has been added.\n\nRestaurant Name: {Restaurant_name}\nView Details: https://yumma.onrender.com/Restaurant-details/{new_Restaurant.id}"
-            )
-
             image_files = request.files.getlist(f"images_{i}")
             for file in image_files:
                 if file and file.filename != "":
@@ -579,8 +586,12 @@ def Restaurant_form():
                     new_image = MealImage(meal_id=new_meal.id, image_data=image_data)
                     db.session.add(new_image)
                     db.session.commit()
+        send_email(
+            subject="New Restaurant Listing Submitted",
+            body=f"A new Restaurant has been added.\n\nRestaurant Name: {Restaurant_name}\nView Details: https://yumma.onrender.com/Restaurant-details/{new_Restaurant.id}"
+        )
 
-        return "Restaurant Details Submitted Successfully!"
+        return redirect(url_for('Restaurant_details', Restaurant_id=new_Restaurant.id))
 
     return render_template("meal_form.html")
 
@@ -603,15 +614,18 @@ def Restaurant_list():
 
 @app.route('/Restaurant-details/<int:Restaurant_id>')
 def Restaurant_details(Restaurant_id):
-    if not session.get('admin_logged_in'):
-        flash("Unauthorized Access! Please Login.", "danger")
-        return redirect(url_for('admin_login'))
-    
     Restaurant = RestaurantDetails.query.get(Restaurant_id)
 
     if not Restaurant:
         print(f"Restaurant ID {Restaurant_id} not found!")
         return "Restaurant not found", 404
+
+    user_email = (session.get('email') or '').strip().lower()
+    restaurant_email = (Restaurant.email or '').strip().lower()
+
+    if not session.get('admin_logged_in') and user_email != restaurant_email:
+        flash("Unauthorized Access! You can only view your own Restaurant details.", "danger")
+        return redirect(url_for('admin_login'))
 
     meals = Meal.query.filter_by(Restaurant_id=Restaurant_id).all()
 
