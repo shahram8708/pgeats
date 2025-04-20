@@ -8,7 +8,7 @@ from utils import send_email
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://pgeats_sb9b_user:8eYRKUxK27GAOLQqNTzVLCxglCKBly7Q@dpg-cvt68oqdbo4c73cirjj0-a.singapore-postgres.render.com/pgeats_sb9b'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
@@ -152,11 +152,6 @@ def pg_form():
                 db.session.add(new_room)
                 db.session.commit()
 
-                send_email(
-                    subject="New PG Listing Submitted",
-                    body=f"A new PG has been added.\n\nPG Name: {pg_name}\nView Details: https://yumma.onrender.com/pg-details/{new_pg.id}"
-                )
-                
                 image_files = request.files.getlist(f"images_{i}")
                 for file in image_files:
                     if file and file.filename != "":
@@ -164,6 +159,11 @@ def pg_form():
                         new_image = RoomImage(room_id=new_room.id, image_data=image_data)
                         db.session.add(new_image)
                         db.session.commit()
+
+        send_email(
+            subject="New PG Listing Submitted",
+            body=f"A new PG has been added.\n\nPG Name: {pg_name}\nView Details: https://yumma.onrender.com/pg-details/{new_pg.id}"
+        )
 
         return "PG Details Submitted Successfully!"
 
