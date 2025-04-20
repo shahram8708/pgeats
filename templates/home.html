@@ -243,6 +243,43 @@
         <div class="row g-4">
             <div class="col-md-6 col-lg-4">
                 <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-hotel text-primary mb-3 fs-1"></i>
+                    <h3>PG Accommodation</h3>
+                    <p>Find verified PGs with comfortable rooms and facilities.</p>
+                    <a href="{{ url_for('pg_list') }}" class="btn btn-primary">View PG Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-utensils text-danger mb-3 fs-1"></i>
+                    <h3>Food Services</h3>
+                    <p>Delicious and hygienic meal services at your doorstep.</p>
+                    <a href="{{ url_for('EATS_list') }}" class="btn btn-danger">View Tiffin Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-bed text-success mb-3 fs-1"></i>
+                    <h3>Hotel Room Booking</h3>
+                    <p>Book affordable and comfortable hotel rooms easily.</p>
+                    <a href="{{ url_for('hotel_list') }}" class="btn btn-success">View Hotel Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
+                    <i class="fa-solid fa-utensils text-warning mb-3 fs-1"></i>
+                    <h3>Restaurant Food Listings</h3>
+                    <p>Find the best restaurants and their top dishes.</p>
+                    <a href="{{ url_for('Restaurant_list') }}" class="btn btn-warning text-dark">View Restaurant
+                        Listings</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card text-center p-4 shadow-sm">
                     <i class="fa-solid fa-clipboard-list text-info mb-3 fs-1"></i>
                     <h3>Register Your PG</h3>
                     <p>List your PG accommodation and reach more tenants.</p>
