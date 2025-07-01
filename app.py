@@ -8,7 +8,7 @@ from utils import send_email
 app = Flask(__name__)
 app.secret_key = "pgeats6708"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yumma_rrj0_user:nZVl3Okb9j8viWdedXoXfLbLyl3xH69C@dpg-d0ui256mcj7s739n6g7g-a.singapore-postgres.render.com/yumma_rrj0'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Yumma_owner:npg_QZ9di2vtNwaj@ep-restless-waterfall-a9q8r6zm-pooler.gwc.azure.neon.tech/Yumma?sslmode=require&channel_binding=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
